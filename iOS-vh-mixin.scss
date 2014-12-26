@@ -1,0 +1,54 @@
+@mixin vh($property, $height, $important) {
+  #{$property}: #{$height}vh if($important, !important, null);
+
+  $sizes: (
+    iPad: (
+      'width' 768,
+      'height' 1024
+    ),
+    iPhone4: (
+      'width' 320,
+      'height' 480
+    ),
+    iPhone5: (
+      'width' 320,
+      'height' 568
+    ),
+    iPhone6: (
+      'width' 375,
+      'height' 667
+    ),
+    iPhone6Plus: (
+      'width' 414,
+      'height' 736
+    )
+  );
+
+  $orientations: (
+    0 portrait,
+    1 landscape
+  );
+
+  $pxwidth: null;
+  $pxheight: null;
+
+  @each $name, $size in $sizes {
+    @each $index, $orientation in $orientations {
+      $map: map-get($sizes, $name);
+
+      @each $key, $value in $map {
+        @if ($key == 'height') {
+          $pxheight: $value;
+        }
+        @else {
+          $pxwidth: $value;
+        }
+      }
+
+      @media all and (device-width: #{$pxwidth}px) and (device-height: #{$pxheight}px) and (orientation: $orientation){
+        #{$property}: #{if($orientation == portrait, $pxheight, $pxwidth)*($height/100)}px if($important, !important, null);
+      }
+    }
+  }
+}
+
