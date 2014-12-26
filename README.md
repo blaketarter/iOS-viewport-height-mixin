@@ -20,7 +20,7 @@ height: 100vh;
 
 The Mixin takes three parameters.
   - Property: String - _ie 'height' or 'max-height'_
-    - Thee property you want to be generated.
+    - The property you want to be generated.
   - Value: Number _ie 100 or 80_
     - The number of viewport units you want the element to take up.
   - Important: Boolean - _ie true or false_
@@ -92,3 +92,6 @@ Would output...
 }
 
 ```
+##Requirements
+
+This mixin requires at least Sass v3.3
