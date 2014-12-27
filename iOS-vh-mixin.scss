@@ -1,5 +1,5 @@
-@mixin vh($property, $height, $important) {
-  #{$property}: #{$height}vh if($important, !important, null);
+@mixin viewport($unit: 'vh', $property: 'height', $amount: 100, $important: false, $sourceProperty: 'height') {
+  #{$property}: #{$amount}#{$unit} if($important, !important, null);
 
   $sizes: (
     iPad: (
@@ -37,18 +37,43 @@
       $map: map-get($sizes, $name);
 
       @each $key, $value in $map {
-        @if ($key == 'height') {
-          $pxheight: $value;
+        @if ($sourceProperty == 'height') {
+          @if ($key == 'height') {
+            $pxheight: $value;
+          }
+          @else {
+            $pxwidth: $value;
+          }
         }
         @else {
-          $pxwidth: $value;
+          @if ($key == 'height') {
+            $pxwidth: $value;
+          }
+          @else {
+            $pxheight: $value;
+          }
         }
       }
 
       @media all and (device-width: #{$pxwidth}px) and (device-height: #{$pxheight}px) and (orientation: $orientation){
-        #{$property}: #{if($orientation == portrait, $pxheight, $pxwidth)*($height/100)}px if($important, !important, null);
+        #{$property}: #{if($orientation == portrait, $pxheight, $pxwidth)*($amount/100)}px if($important, !important, null);
       }
     }
   }
 }
 
+@mixin vh($property: 'height', $amount: 100, $important: false, $sourceProperty: 'height') {
+  @include viewport('vh', $property, $amount, $important, $sourceProperty);
+}
+
+@mixin vw($property: 'width', $amount: 100, $important: false, $sourceProperty: 'width') {
+  @include viewport('vw', $property, $amount, $important, $sourceProperty);
+}
+
+@mixin vmin($property: 'height', $amount: 100, $important: false, $sourceProperty: 'height') {
+  @include viewport('vmin', $property, $amount, $important, $sourceProperty);
+}
+
+@mixin vmax($property: 'height', $amount: 100, $important: false, $sourceProperty: 'height') {
+  @include viewport('vmax', $property, $amount, $important, $sourceProperty);
+}
